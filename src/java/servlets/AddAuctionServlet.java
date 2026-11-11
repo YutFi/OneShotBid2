@@ -18,7 +18,6 @@ import bean.User;
 @MultipartConfig
 public class AddAuctionServlet extends HttpServlet {
 
-    private static final String UPLOAD_DIR = "C:\\auction-images"; // Make sure this folder exists
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -48,12 +47,14 @@ public class AddAuctionServlet extends HttpServlet {
 
         // Sanitize filename to avoid directory traversal attacks
         originalFileName = originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
+        // Unique prefix so two uploads with the same file name never collide
+        originalFileName = System.currentTimeMillis() + "_" + originalFileName;
 
         // Save image file
-        File uploadDir = new File(UPLOAD_DIR);
+        File uploadDir = new File(util.DBConnector.imageDir());
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
-        File file = new File(UPLOAD_DIR, originalFileName);
+        File file = new File(uploadDir, originalFileName);
         try (InputStream input = imagePart.getInputStream()) {
             Files.copy(input, file.toPath());
         } catch (IOException ex) {

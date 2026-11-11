@@ -1,0 +1,29 @@
+name: Compile and package WAR
+
+# Compiles the servlets against the Jakarta Servlet API and packages a WAR (uploaded as a workflow artifact).
+# This checks the Java code builds; it does not start GlassFish or a database.
+on:
+  push:
+    branches: [master, main]
+    paths-ignore: ['docs/**', '**.md']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Compile servlets
+        run: |
+          curl -fsSL -o servlet-api.jar https://repo1.maven.org/maven2/jakarta/servlet/jakarta.servlet-api/6.0.0/jakarta.servlet-api-6.0.0.jar
+          mkdir -p war/WEB-INF/classes
+          javac -Xlint:-options --release 17 -cp servlet-api.jar -d war/WEB-INF/classes $(find src/java -name '*.java')
+      - name: Package WAR
+        run: |
+          cp -r web/* war/
+          (cd war && jar cf ../OneShotBid.war .)
+          ls -la OneShotBid.war
+      - uses: actions/upload-artifact@v4
+        with: { name: OneShotBid-war, path: OneShotBid.war }

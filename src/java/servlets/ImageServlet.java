@@ -7,14 +7,20 @@ import java.io.*;
 
 @WebServlet("/image/*")
 public class ImageServlet extends HttpServlet {
-    private static final String IMAGE_DIR = "C:\\auction-images";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String fileName = request.getPathInfo().substring(1); // remove leading /
-        File file = new File(IMAGE_DIR, fileName);
+        String info = request.getPathInfo();
+        if (info == null || info.length() < 2) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        // Only the bare file name is allowed (blocks ../ path traversal).
+        String fileName = new File(info.substring(1)).getName();
+        File dir = new File(util.DBConnector.imageDir());
+        File file = new File(dir, fileName);
 
-        if (!file.exists()) {
+        if (!file.isFile()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }

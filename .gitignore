@@ -1,0 +1,9 @@
+# Build output (rebuilt by CI / NetBeans)
+build/
+dist/
+# NetBeans per-user settings (contain local machine paths)
+nbproject/private/
+# OS / tooling
+.DS_Store
+*.log
+node_modules/

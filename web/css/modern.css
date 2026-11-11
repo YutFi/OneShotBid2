@@ -1,0 +1,56 @@
+/* OneShotBid – additive animation / polish layer.
+   Linked AFTER each page's own <style>, so it only adds motion and small refinements;
+   it does not change layout or colours. Everything respects prefers-reduced-motion. */
+
+@keyframes osb-fade-up   { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes osb-fade-in   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes osb-pop       { 0% { opacity: 0; transform: scale(.94); } 100% { opacity: 1; transform: none; } }
+@keyframes osb-shimmer   { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes osb-pulse     { 0%,100% { box-shadow: 0 0 0 0 rgba(255,193,7,.45); } 50% { box-shadow: 0 0 0 10px rgba(255,193,7,0); } }
+@keyframes osb-float     { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+html { scroll-behavior: smooth; }
+body { animation: osb-fade-in .5s ease both; }
+
+/* Entrances */
+.container, .signup-box, .payment-box, .product-detail, .hero-content,
+.dashboard-section, .bidding-section, .account-info { animation: osb-fade-up .6s cubic-bezier(.2,.7,.2,1) both; }
+.left-side, .right-side { animation: osb-fade-in .8s ease both; }
+
+/* Staggered cards / list rows */
+.auction-card, .auction-item, .notification, .product-info {
+  animation: osb-pop .55s cubic-bezier(.2,.7,.2,1) both;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.auction-card:nth-child(1), .auction-item:nth-child(1), .notification:nth-child(1) { animation-delay: .05s; }
+.auction-card:nth-child(2), .auction-item:nth-child(2), .notification:nth-child(2) { animation-delay: .12s; }
+.auction-card:nth-child(3), .auction-item:nth-child(3), .notification:nth-child(3) { animation-delay: .19s; }
+.auction-card:nth-child(4), .auction-item:nth-child(4), .notification:nth-child(4) { animation-delay: .26s; }
+.auction-card:nth-child(5), .auction-item:nth-child(5), .notification:nth-child(5) { animation-delay: .33s; }
+.auction-card:nth-child(n+6), .auction-item:nth-child(n+6), .notification:nth-child(n+6) { animation-delay: .4s; }
+.auction-card:hover, .auction-item:hover { transform: translateY(-6px); box-shadow: 0 14px 28px rgba(0,0,0,.35); }
+
+/* Buttons & links */
+button, .button, .join-btn, .edit-btn, .delete-btn, input[type=submit] {
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+button:hover, .button:hover, .join-btn:hover, .edit-btn:hover, .delete-btn:hover, input[type=submit]:hover {
+  transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 8px 18px rgba(0,0,0,.3);
+}
+button:active, .button:active, .join-btn:active, input[type=submit]:active { transform: translateY(0) scale(.98); }
+.join-btn, .hero .button { animation: osb-pulse 2.6s ease-in-out 1.2s infinite; }
+a { transition: color .2s ease, opacity .2s ease; }
+
+/* Form fields */
+input, select, textarea { transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease; }
+input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,193,7,.45); }
+
+/* Images & status messages */
+.auction-card img, .product-detail img { transition: transform .5s ease; }
+.auction-card:hover img { transform: scale(1.04); }
+.logo, .membership-badge { animation: osb-float 4s ease-in-out infinite; }
+.error, .error-message, .success { animation: osb-pop .4s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

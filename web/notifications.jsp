@@ -62,6 +62,7 @@
             text-decoration: underline;
         }
     </style>
+    <link rel="stylesheet" href="css/modern.css">
 </head>
 <body>
     <h2>Your Notifications</h2>

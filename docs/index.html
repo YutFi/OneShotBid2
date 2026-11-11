@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OneShotBid – live demo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%231a1a40%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-size=%2738%27 text-anchor=%27middle%27%3E%F0%9F%94%A8%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Browser demo of OneShotBid, an online auction platform. Data is kept in your browser only.">
+<style>
+:root{--bg:#1a1a40;--panel:#263445;--panel2:#2f4157;--accent:#ffd700;--accent2:#ff6a00;--blue:#063970;--text:#fff;--muted:#b9c4d6;--ok:#4cd98a;--bad:#ff6b6b;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Roboto,system-ui,Segoe UI,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,#2b2b7a 0,transparent 60%),var(--bg);color:var(--text);min-height:100vh;animation:fade .5s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes flash{0%{background:rgba(255,215,0,.35)}100%{background:transparent}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.5)}50%{box-shadow:0 0 0 10px rgba(255,215,0,0)}}
+.banner{background:#3a2d00;color:#ffe08a;text-align:center;padding:8px 12px;font-size:14px}
+header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 5vw;background:rgba(15,15,45,.7);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5}
+.brand{font-weight:800;font-size:22px;letter-spacing:.3px}.brand span{color:var(--accent)}
+nav{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+nav button,.btn{font:inherit;border:0;border-radius:10px;padding:9px 14px;cursor:pointer;color:#fff;background:transparent;transition:transform .18s,background .2s,box-shadow .18s}
+nav button:hover{background:rgba(255,255,255,.1)}nav button.on{background:var(--blue)}
+.btn{background:var(--blue);font-weight:700}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.35)}.btn:active{transform:scale(.98)}
+.btn.gold{background:var(--accent);color:#1a1a40}.btn.ghost{background:rgba(255,255,255,.1)}.btn.danger{background:#8c2b2b}
+.who{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.who input{width:130px}
+main{max-width:1100px;margin:0 auto;padding:26px 5vw 60px}
+h1{margin:.2em 0 .1em;font-size:clamp(26px,4vw,38px);animation:up .6s both}
+.sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.card{background:var(--panel);border-radius:var(--r);overflow:hidden;cursor:pointer;animation:pop .5s both;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 30px rgba(0,0,0,.4)}
+.pic{height:140px;display:grid;place-items:center;font-size:62px;transition:transform .4s}.card:hover .pic{transform:scale(1.08)}
+.body{padding:14px 16px 16px}.body h3{margin:0 0 4px;font-size:18px}
+.price{color:var(--accent);font-size:22px;font-weight:800}
+.meta{color:var(--muted);font-size:13px;display:flex;justify-content:space-between;margin-top:6px}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.tag.live{background:rgba(76,217,138,.18);color:var(--ok)}.tag.end{background:rgba(255,255,255,.12);color:var(--muted)}
+.panel{background:var(--panel);border-radius:var(--r);padding:22px;animation:up .5s both}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.big{font-size:54px;text-align:center;border-radius:12px;padding:30px 0}
+input,textarea,select{font:inherit;width:100%;padding:10px 12px;border-radius:10px;border:1px solid #435670;background:#1d2937;color:#fff;transition:box-shadow .2s}
+input:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(255,215,0,.45)}
+label{display:block;margin:12px 0 4px;color:var(--muted);font-size:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 6px;text-align:left;border-bottom:1px solid #3a4c63;font-size:14px}
+tr.new{animation:flash 1.4s}
+.timer{font-variant-numeric:tabular-nums;font-weight:700}.timer.low{color:var(--accent2)}
+.msg{padding:10px 12px;border-radius:10px;margin:10px 0;animation:pop .3s both}.msg.err{background:rgba(255,107,107,.15);color:var(--bad)}.msg.ok{background:rgba(76,217,138,.15);color:var(--ok)}
+.note{border-left:4px solid var(--accent);background:var(--panel);padding:10px 14px;border-radius:8px;margin:8px 0;animation:up .4s both}
+.empty{color:var(--muted);text-align:center;padding:40px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0b2a4a;border:1px solid #2d6cb0;padding:12px 18px;border-radius:12px;animation:up .3s both;z-index:20}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px}
+a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="banner">Demo version: runs entirely in your browser and stores data on this device only. The real app is a Java/JSP + Derby web application – see the <a href="https://github.com/YutFi/OneShotBid2">repository</a>.</div>
+<header>
+  <div class="brand">🔨 One<span>Shot</span>Bid</div>
+  <nav id="nav"></nav>
+  <div class="who">Bidding as <input id="user" maxlength="20" aria-label="Your name"></div>
+</header>
+<main id="view"></main>
+<footer>OneShotBid demo · built by Ariff Lutfi · <button class="btn ghost" id="reset" style="padding:4px 10px;font-size:12px">Reset demo data</button></footer>
+<script src="app.js"></script>
+</body>
+</html>
